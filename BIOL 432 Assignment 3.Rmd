@@ -4,13 +4,15 @@ author: "Micah GVI"
 date: "26/01/2021"
 output: html_document
 ---
-
+##Project Info
 title: "BIOL 432 Assignment 3"
 author: "Micah GVI"
 date: "26/01/2021"
+git: https://github.com/micahgrubert/BIOL-432-Assignment-3
 
-```{r cars}
-summary(cars)
+
+```{r}
+
 ```
 
 ## Including Plots

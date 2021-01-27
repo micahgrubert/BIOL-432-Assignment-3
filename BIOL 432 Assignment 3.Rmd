@@ -12,7 +12,7 @@ git: https://github.com/micahgrubert/BIOL-432-Assignment-3
 
 
 ```{r}
-
+read.csv(/."FallopiaData.csv")
 ```
 
 ## Including Plots

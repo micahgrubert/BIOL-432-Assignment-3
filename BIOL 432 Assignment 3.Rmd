@@ -10,17 +10,58 @@ author: "Micah GVI"
 date: "26/01/2021"
 git: https://github.com/micahgrubert/BIOL-432-Assignment-3
 
+```{r, }
+library(dplyr)
+```
+
+
 
 ```{r}
-read.csv(./"FallopiaData.csv")
+dat<- read.csv("./InputData/FallopiaData.csv") #loading data
+as.data.frame(dat) #convert from list to data.frame
+
+fallo<-filter(dat, Total > 60) #remove rows with Total Biomass <60
+Fallo$Total #confirm successful removal
+
+fallo1<-select(fallo,Total,Taxon,Scenario,Nutrients) #reorder and remove all other columns
+head(fallo1) #confirm success
+
+fallo2<- fallo1 %>% mutate(TotalG = Total/1000) %>% #piping to create column
+  select(TotalG,Taxon,Scenario,Nutrients) #replacing and reordering to retain TotalG at front of the df. Could use select(-Total) if order was irrelevant
+head(fallo2) #confirm success
+
+```
+```{r}
+fallo_counter<-function(X= NULL, calc=c("Average", "Sum", "Observations")){
+  if (calc == "Average"){
+    cat("The average of your vector is:",mean(X))
+  }
+  else if (calc == "Sum"){
+    cat("The sum of your vector is:",sum(X))
+  }
+  else if (calc == "Observations"){
+    cat("The number of observations in your vector is:",length(X))
+  }
+  else{
+    cat("Error: Please input a vector and either 'Average', 'Sum,' or 'Observations' separated by a comma")
+  }
+}
+
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+fallo_counter(fallo2$TotalG, "Average")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+fallo_counter(fallo2$TotalG, "Sum")
+```
+
+```{r}
+fallo_counter(fallo2$TotalG, "Observations")
+```
+
+```{r}
+fallo_counter(fallo2$TotalG, "something else")
+```
+

@@ -11,7 +11,7 @@ date: "26/01/2021"
 git: https://github.com/micahgrubert/BIOL-432-Assignment-3
 
 ```{r, }
-library(dplyr)
+library(dplyr) #load dplyr package
 ```
 
 
@@ -29,39 +29,36 @@ head(fallo1) #confirm success
 fallo2<- fallo1 %>% mutate(TotalG = Total/1000) %>% #piping to create column
   select(TotalG,Taxon,Scenario,Nutrients) #replacing and reordering to retain TotalG at front of the df. Could use select(-Total) if order was irrelevant
 head(fallo2) #confirm success
-
 ```
 ```{r}
-fallo_counter<-function(X= NULL, calc=c("Average", "Sum", "Observations")){
-  if (calc == "Average"){
-    cat("The average of your vector is:",mean(X))
+fallo_counter<-function(X= c(), calc=c("Average", "Sum", "Observations")){ #custom function with variable X, and a series of three possible sting inputs
+  if (calc == "Average"){ #when asking for average
+    print(mean(X)) # produce a message that gives the avg
   }
-  else if (calc == "Sum"){
-    cat("The sum of your vector is:",sum(X))
+  else if (calc == "Sum"){ #when  asking for the sum
+    print(sum(X)) #print sum of the vector
   }
-  else if (calc == "Observations"){
-    cat("The number of observations in your vector is:",length(X))
+  else if (calc == "Observations"){ #when asking for number of observation
+    print(length(X)) # print the number of obs (note could use nrow for column, however this would not capture missing lines)
   }
   else{
-    cat("Error: Please input a vector and either 'Average', 'Sum,' or 'Observations' separated by a comma")
+    cat("Error: Please input a vector and either 'Average', 'Sum,' or 'Observations' separated by a comma") #creates error message if one of the three string inputs is not used
   }
 }
 
 ```
 
 ```{r}
-fallo_counter(fallo2$TotalG, "Average")
+fallo_counter(fallo2$Taxon, "Observations") # counts number of observations in the Taxon column
 ```
 
 ```{r}
-fallo_counter(fallo2$TotalG, "Sum")
+fallo2 %>% group_by(Nutrients) %>% #pipe to create nutrient groupings
+  summarise(avgTotalG=fallo_counter(TotalG,"Average")) #use my custom function to generate output from data created earlier in this pipeline
+```
+```{r}
+write.csv(fallo2,"./Output/WrangledData.csv")
 ```
 
-```{r}
-fallo_counter(fallo2$TotalG, "Observations")
-```
 
-```{r}
-fallo_counter(fallo2$TotalG, "something else")
-```
 

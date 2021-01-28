@@ -4,32 +4,29 @@ author: "Micah GVI"
 date: "26/01/2021"
 output: html_document
 ---
-##Project Info
-title: "BIOL 432 Assignment 3"
-author: "Micah GVI"
-date: "26/01/2021"
-git: https://github.com/micahgrubert/BIOL-432-Assignment-3
-
-```{r, }
+### Project Info
+**Date**: January 29, 2021
+**GitHub**: https://github.com/micahgrubert/BIOL-432-Assignment-3
+```{r, include=FALSE}
 library(dplyr) #load dplyr package
 ```
 
 
-
+#### Initial Data Wrangling
 ```{r}
 dat<- read.csv("./InputData/FallopiaData.csv") #loading data
-as.data.frame(dat) #convert from list to data.frame
+dat<-as.data.frame(dat) #convert from list to data.frame
 
 fallo<-filter(dat, Total > 60) #remove rows with Total Biomass <60
-Fallo$Total #confirm successful removal
 
 fallo1<-select(fallo,Total,Taxon,Scenario,Nutrients) #reorder and remove all other columns
-head(fallo1) #confirm success
 
-fallo2<- fallo1 %>% mutate(TotalG = Total/1000) %>% #piping to create column
-  select(TotalG,Taxon,Scenario,Nutrients) #replacing and reordering to retain TotalG at front of the df. Could use select(-Total) if order was irrelevant
+fallo2<- fallo1 %>% mutate(TotalG = Total/1000) %>% #piping to create new column
+  select(TotalG,Taxon,Scenario,Nutrients) # continue pipe for replacing and reordering to retain TotalG at front of the df. Could use select(-Total) if order was irrelevant
 head(fallo2) #confirm success
 ```
+#### Creating a Custom Function
+This function will take two inputs from the user and produce one of four outputs:
 ```{r}
 fallo_counter<-function(X= c(), calc=c("Average", "Sum", "Observations")){ #custom function with variable X, and a series of three possible sting inputs
   if (calc == "Average"){ #when asking for average
@@ -48,17 +45,21 @@ fallo_counter<-function(X= c(), calc=c("Average", "Sum", "Observations")){ #cust
 
 ```
 
+#### Using the Custom Function
 ```{r}
-fallo_counter(fallo2$Taxon, "Observations") # counts number of observations in the Taxon column
+fallo_counter(fallo2$Taxon, "Observations") #counts number of observations in the Taxon column
+```
+```{r}
+AvgTotalG<-fallo2 %>% group_by(Nutrients) %>% #pipe to create nutrient groupings
+  summarise(avgTotalG=fallo_counter(TotalG,"Average")) #use my custom function to generate output from data created earlier in this pipeline
+AvgTotalG #printing table output from pipeline
 ```
 
+#### Creating a new .csv file
 ```{r}
-fallo2 %>% group_by(Nutrients) %>% #pipe to create nutrient groupings
-  summarise(avgTotalG=fallo_counter(TotalG,"Average")) #use my custom function to generate output from data created earlier in this pipeline
+write.csv(fallo2,"./Output/WrangledData.csv") #write a CSV containing wrangled data
 ```
-```{r}
-write.csv(fallo2,"./Output/WrangledData.csv")
-```
+
 
 
 

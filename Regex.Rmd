@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 ```
 
-Import your measurements.csv file from the Week 1 Assignment into an object called MData
 ```{r}
 Mdata<-read.csv("./measurements.csv") #load data from week 1 assignment
 head(Mdata)
@@ -19,28 +18,14 @@ head(Mdata)
 ```{r}
 Mdata<- Mdata %>% mutate(Sp = sub("(\\w)\\w+","\\1.",Organism)) #creating new column that shortens genus name to the first letter and  period
 head(Mdata) #confirm successful column addition
-
+```
+```{r}
 Mdata<- select(Mdata, Sp, Limb.length, Limb.width, Observer, Sp) # reorder columns and replace Organism column with Sp
 head(Mdata) # confirm successful column replacement/reorder
-
-
 ```
 
 
-Use a dplyr command to create a new dataset BUT with Sp column instead of the Organism column, moved to the beginning in place of the original Organism column.
-
-Save the dataset as a new file called MeasShort.csv
-
-Commit these changes using Git in RStudio
-
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+write.csv(Mdata,"MeasShort.csv") # creating csv with data from Mdata
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
